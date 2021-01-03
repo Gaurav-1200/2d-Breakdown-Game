@@ -1,7 +1,8 @@
 var can = document.getElementById("myCanvas");
 var ctx = can.getContext("2d");
 var ballRadius = 10;
-var x = can.width/2, dx=-2;
+var level=1;
+var x = (can.width)/2, dx=3;
 var y = can.height-30,dy=-2;
 var paddleHeight = 10,paddleWidth = 75,paddleX = (can.width-paddleWidth)/2, paddleStep=7;
 var leftPressed = false,rightPressed = false;
@@ -77,7 +78,6 @@ function collisionDetection()
                         //add confetti here.
                         alert("You Won!!");
                         document.location.reload();
-                        clearInterval(interval);
                     }
                 }
             }
@@ -135,7 +135,8 @@ function draw() {
     else if(y + dy > can.height-ballRadius) {
         if(x > paddleX && x < paddleX + paddleWidth) {
            if(y= y-paddleHeight){
-            dy+=0.2;   
+            if(dy<=0) dy-=0.2;
+            else dy+=0.2; 
             dy = -dy  ;
 			 }
         }
@@ -146,10 +147,11 @@ function draw() {
             {
             alert("GAME OVER");
             document.location.reload();
-            clearInterval(interval); // Needed for Chrome to end game
             }
             else
-            {
+            {   
+                //alert("Life Lost. Only"+live+"remaining");
+                //sleep(1000);
                 x=can.width/2;
                 y=can.height-30;
                 dx=2;
@@ -169,6 +171,6 @@ function draw() {
     
     x += dx;
     y += dy;
+    requestAnimationFrame(draw);
 }
-
-var interval = setInterval(draw, 10);
+draw();
